@@ -76,6 +76,7 @@ class Root(object):
         var map = null;
         var myLocationMarker = null;
         var infoWindow = null;
+        var travelPath = null;
 
         $(document).ready(function() {
 
@@ -113,10 +114,19 @@ class Root(object):
             mapOptions);
             marker = new google.maps.Marker({
                 position: { lat: jsonObject.lat, lng: jsonObject.lon},
-                icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+                icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
                 map: map
             });
+            
+            travelPath = new google.maps.Polyline({
+                path: [{ lat: jsonObject.lat, lng: jsonObject.lon}],
+                geodesic: true,
+                strokeColor: '#0000FF',
+                strokeOpacity: 1.0,
+                strokeWeight: 2
+                });
 
+            travelPath.setMap(map);
             
             mapInitialized = true;
              }
@@ -124,6 +134,8 @@ class Root(object):
             if (jsonObject.type == "current_location")
             {
                 marker.setPosition(new google.maps.LatLng(jsonObject.lat, jsonObject.lon));
+                var path = travelPath.getPath();
+                path.push(new google.maps.LatLng(jsonObject.lat, jsonObject.lon));
             }
           };
 
